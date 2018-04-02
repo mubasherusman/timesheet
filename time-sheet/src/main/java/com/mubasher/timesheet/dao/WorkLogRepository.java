@@ -8,7 +8,7 @@ import org.springframework.stereotype.Repository;
 import com.mubasher.timesheet.model.Work;
 
 @Repository("workLogRepository")
-public interface WorkLogRepository extends JpaRepository<Work, Integer>{
+public interface WorkLogRepository extends JpaRepository<Work, Long>{
 
 	List<Work> findByUserId(Integer id);
 

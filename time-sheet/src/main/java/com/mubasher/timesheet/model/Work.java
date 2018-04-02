@@ -8,12 +8,12 @@ import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
+import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
-import org.springframework.data.annotation.Id;
 
 @Entity
 @Table(name = Work.TABLE_NAME)
@@ -23,7 +23,7 @@ public class Work{
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Integer id;
+	private int id;
 	
 	@ManyToOne(fetch=FetchType.LAZY,cascade=CascadeType.ALL)
 	private User user;
@@ -47,7 +47,7 @@ public class Work{
 		super();
 	}
 	
-	public Work(Integer id, Date date, String jiraId, String description, WorkType workType,
+	public Work(int id, Date date, String jiraId, String description, WorkType workType,
 			double hours, int week) {
 		this.id = id;
 		this.date = date;
@@ -119,11 +119,11 @@ public class Work{
 		this.week = week;
 	}
 
-	public void setId(Integer id) {
+	public void setId(int id) {
 		this.id = id;
 	}
 
-	public Integer getId() {
+	public int getId() {
 		return id;
 	}
 

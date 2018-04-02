@@ -64,7 +64,7 @@ public class WorkLogServiceImpl implements WorkLogService{
 	@Override
 	@Transactional
 	public Work findWork(Integer id) {
-		Optional<Work> o =  workLogRepository.findById(id);
+		Optional<Work> o =  workLogRepository.findById(new Long(id));
 		return o.get();
 	}
 
