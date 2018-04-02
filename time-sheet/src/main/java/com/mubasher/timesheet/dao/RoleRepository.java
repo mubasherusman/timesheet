@@ -1,14 +1,15 @@
 package com.mubasher.timesheet.dao;
 
 
-import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.mubasher.timesheet.model.Role;
 
 
 @Repository("roleRepository")
-public interface RoleRepository extends JpaRepository<Role, Integer>{
+@Transactional(readOnly=false)
+public interface RoleRepository extends GenericSimpleJpaRepository<Role, Integer>{
 	Role findByRole(String role);
 
 }

@@ -3,11 +3,10 @@ package com.mubasher.timesheet.service.impl;
 import java.util.Arrays;
 import java.util.HashSet;
 
-import javax.transaction.Transactional;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.mubasher.timesheet.dao.RoleRepository;
 import com.mubasher.timesheet.dao.UserRepository;
@@ -17,6 +16,7 @@ import com.mubasher.timesheet.service.UserService;
 
 
 @Service("userService")
+@Transactional(readOnly=false)
 public class UserServiceImpl implements UserService{
 
 	@Autowired
@@ -31,8 +31,6 @@ public class UserServiceImpl implements UserService{
 		return userRepository.findByEmail(email);
 	}
 
-	@Override
-	@Transactional
 	public User saveUser(User user) {
 		user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
         user.setActive(1);

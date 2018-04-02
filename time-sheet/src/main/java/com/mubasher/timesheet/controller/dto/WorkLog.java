@@ -1,33 +1,64 @@
 package com.mubasher.timesheet.controller.dto;
 
 import java.util.Date;
-import java.util.List;
+
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
+
+import org.springframework.format.annotation.DateTimeFormat;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.mubasher.timesheet.model.WorkType;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class WorkLog {
 	
-	private Date date;
-	private UserDetails user;
-	private List<LogEntry> logEntries;
-	public List<LogEntry> getLogEntries() {
-		return logEntries;
+	@NotNull(message="* Please Select Date")
+	@DateTimeFormat(pattern = "yyyy-MM-dd")
+	private Date currentDate;
+	private String userEmail;
+	@NotEmpty(message="* Please Select Jira Id")
+	private String jiraId;
+	@NotNull(message="* Please Select Work Type")
+	private WorkType workType;
+	private String description;
+	private double hour;
+	
+	public String getDescription() {
+		return description;
 	}
-	public void setLogEntries(List<LogEntry> logEntries) {
-		this.logEntries = logEntries;
+	public void setDescription(String description) {
+		this.description = description;
 	}
-	public UserDetails getUserDetails() {
-		return user;
+	public WorkType getWorkType() {
+		return workType;
 	}
-	public void setUserDetails(UserDetails user) {
-		this.user = user;
+	public void setWorkType(WorkType workType) {
+		this.workType = workType;
 	}
-	public Date getDate() {
-		return date;
+	public String getJiraId() {
+		return jiraId;
 	}
-	public void setDate(Date date) {
-		this.date = date;
+	public void setJiraId(String jiraId) {
+		this.jiraId = jiraId;
+	}
+	public double getHour() {
+		return hour;
+	}
+	public void setHour(double hour) {
+		this.hour = hour;
+	}
+	public Date getCurrentDate() {
+		return currentDate;
+	}
+	public void setCurrentDate(Date date) {
+		this.currentDate = date;
+	}
+	public String getUserEmail() {
+		return userEmail;
+	}
+	public void setUserEmail(String userEmail) {
+		this.userEmail = userEmail;
 	}
 	
 }

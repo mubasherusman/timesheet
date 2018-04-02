@@ -25,7 +25,7 @@ import com.mubasher.timesheet.utils.BeanMapper;
 
 
 @RestController
-@RequestMapping(APIConstants.API_URL_PREFIX_LOG_WORK)
+@RequestMapping(APIConstants.API_URL_PREFIX_WORK_LOGS)
 public class WorkLogController {
 	
 	@Autowired
@@ -39,18 +39,18 @@ public class WorkLogController {
 		if(workLog == null)
 			throw new ApiException(ApiCode.ERROR, "Null Form Data Received");
 		
-		List<Work> works = BeanMapper.map(workLog);
+		Work works = BeanMapper.map(workLog);
 		
-		int count = workLogService.logWorks(works);
+		Work count = workLogService.logWork(works);
 		
-		return new WorkLogResponse(ApiCode.SUCCESS, count) ;
+		return new WorkLogResponse(ApiCode.SUCCESS, 1) ;
 		
 	}
 	
 	@GetMapping( produces = { MediaType.APPLICATION_JSON_VALUE })
 	public @ResponseBody BaseResponce getWorkLogs(@RequestParam(defaultValue="1") int userId) throws ApiException {
 		List<Work> works = workLogService.findWorksByUserId(userId);
-		WorkLog workLog = BeanMapper.map(works);
+		List<WorkLog> workLog = BeanMapper.mapWork(works);
 		return new WorkLogResponse(ApiCode.SUCCESS, workLog) ;
 		
 	}

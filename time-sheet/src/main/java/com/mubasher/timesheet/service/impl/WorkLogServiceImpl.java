@@ -14,6 +14,7 @@ import com.mubasher.timesheet.model.WorkType;
 import com.mubasher.timesheet.service.WorkLogService;
 
 @Service
+@Transactional(readOnly=false)
 public class WorkLogServiceImpl implements WorkLogService{
 
 	@Autowired
@@ -23,13 +24,11 @@ public class WorkLogServiceImpl implements WorkLogService{
 	private WorkTypeRepository workTypeRepository;
 	
 	@Override
-	@Transactional
 	public List<WorkType> findWorkTypes() {
 		return workTypeRepository.findAll();
 	}
 	
 	@Override
-	@Transactional
 	public int logWorks(List<Work> works) {
 		if(works == null || works.size() == 0)
 			throw new IllegalArgumentException("List of Works required.");
@@ -44,32 +43,27 @@ public class WorkLogServiceImpl implements WorkLogService{
 	}
 	
 	@Override
-	@Transactional
 	public Work logWork(Work work) {
-		return workLogRepository.save(work);
+		return workLogRepository.saveAndFlush(work);
 	}
 
 	@Override
-	@Transactional
 	public void deleteWork(Work w) {
 		workLogRepository.delete(w);
 	}
 
 	@Override
-	@Transactional
 	public Work findWork(Work w) {
 		return findWork(w.getId());
 	}
 
 	@Override
-	@Transactional
 	public Work findWork(Integer id) {
-		Optional<Work> o =  workLogRepository.findById(new Long(id));
+		Optional<Work> o =  workLogRepository.findById(id);
 		return o.get();
 	}
 
 	@Override
-	@Transactional
 	public List<Work> findWorks() {
 		return workLogRepository.findAll();
 	}
