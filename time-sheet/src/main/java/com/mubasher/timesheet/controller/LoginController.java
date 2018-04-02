@@ -13,6 +13,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.mubasher.timesheet.model.User;
 import com.mubasher.timesheet.service.UserService;
+import com.mubasher.timesheet.utils.BeanMapper;
 
 
 @Controller
@@ -50,9 +51,9 @@ public class LoginController {
 		if (bindingResult.hasErrors()) {
 			modelAndView.setViewName("registration");
 		} else {
-			userService.saveUser(user);
-			modelAndView.addObject("successMessage", "User has been registered successfully");
-			modelAndView.addObject("user", new User());
+			User u = userService.saveUser(user);
+			modelAndView.addObject("successMessage", "UserDetails has been registered successfully");
+			modelAndView.addObject("userDetail", BeanMapper.map(u));
 			modelAndView.setViewName("registration");
 			
 		}
