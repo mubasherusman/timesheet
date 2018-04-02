@@ -27,6 +27,10 @@ public class WorkType{
 		this.description = desc;
 	}
 
+	public WorkType(int id) {
+		this.id = id;
+	}
+
 	public String getType() {
 		return type;
 	}

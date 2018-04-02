@@ -2,13 +2,13 @@ package com.mubasher.timesheet.controller.dto;
 
 import java.util.Date;
 
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.mubasher.timesheet.model.WorkType;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class WorkLog {
@@ -19,8 +19,11 @@ public class WorkLog {
 	private String userEmail;
 	@NotEmpty(message="* Please Select Jira Id")
 	private String jiraId;
+	
+	@Min(value = 1, message="* Please Select Work Type")
 	@NotNull(message="* Please Select Work Type")
-	private WorkType workType;
+	private Integer workTypeId;
+	private String workType;
 	private String description;
 	private double hour;
 	
@@ -29,12 +32,6 @@ public class WorkLog {
 	}
 	public void setDescription(String description) {
 		this.description = description;
-	}
-	public WorkType getWorkType() {
-		return workType;
-	}
-	public void setWorkType(WorkType workType) {
-		this.workType = workType;
 	}
 	public String getJiraId() {
 		return jiraId;
@@ -61,4 +58,16 @@ public class WorkLog {
 		this.userEmail = userEmail;
 	}
 	
+	public Integer getWorkTypeId() {
+		return workTypeId;
+	}
+	public void setWorkTypeId(Integer workTypeId) {
+		this.workTypeId = workTypeId;
+	}
+	public String getWorkType() {
+		return workType;
+	}
+	public void setWorkType(String workType) {
+		this.workType = workType;
+	}
 }

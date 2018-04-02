@@ -9,6 +9,7 @@ import com.mubasher.timesheet.controller.dto.UserDetails;
 import com.mubasher.timesheet.controller.dto.WorkLog;
 import com.mubasher.timesheet.model.User;
 import com.mubasher.timesheet.model.Work;
+import com.mubasher.timesheet.model.WorkType;
 
 
 public class BeanMapper {
@@ -24,15 +25,14 @@ public class BeanMapper {
 		User user = new User();
 		user.setEmail(workLog.getUserEmail());
 		
-		Work work = new Work(user , date,workLog.getJiraId() , workLog.getDescription(), workLog.getWorkType(), workLog.getHour(), week);
+		Work work = new Work(user , date,workLog.getJiraId() , workLog.getDescription(), new WorkType(workLog.getWorkTypeId()), workLog.getHour(), week);
 		
 		return work;
 		
 	}
 	
 	public static WorkLog map(Work work) {
-		WorkLog
-			wl = new WorkLog();
+		WorkLog	wl = new WorkLog();
 		wl.setCurrentDate(work.getDate());
 		User u = work.getUser();
 		if(u!=null) {
@@ -41,7 +41,8 @@ public class BeanMapper {
 		wl.setDescription(work.getDescription());
 		wl.setHour(work.getHours());
 		wl.setJiraId(work.getJiraId());
-		wl.setWorkType(work.getWorkType());
+		wl.setWorkTypeId(work.getWorkType().getId());
+		wl.setWorkType(work.getWorkType().getType());
 		return wl;
 		
 	}

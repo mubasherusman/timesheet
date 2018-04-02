@@ -6,6 +6,7 @@ import java.util.HashSet;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.mubasher.timesheet.dao.RoleRepository;
@@ -16,7 +17,7 @@ import com.mubasher.timesheet.service.UserService;
 
 
 @Service("userService")
-@Transactional(readOnly=false)
+@Transactional(readOnly=false,isolation = Isolation.READ_UNCOMMITTED)
 public class UserServiceImpl implements UserService{
 
 	@Autowired

@@ -24,7 +24,7 @@
 				<div class="panel-heading">
 					<span th:utext="${userName}"></span>
 				</div>
-				<div class="panel-body">
+				<div class="panel-body" style="height: calc(100vh - 120px);">
 					<div class="row">
 						<div class="col-md-5">
 							<form autocomplete="off" action="#" th:action="@{/work_log}" th:object="${workLog}" method="post" class="form-horizontal" role="form">
@@ -45,13 +45,13 @@
 								</div>
 								<div class="form-group">
 									<div class="col-sm-9">
-										 <select class="form-control" th:field="*{workType}">
+										 <select class="form-control" th:field="*{workTypeId}">
 									        <option value="">Select Work Type</option>
 									        <option th:each="wt : ${workTypes}"
 									                th:value="${wt.id}"
 									                th:text="${wt.type}"></option>
 									    </select>
-									    <label th:if="${#fields.hasErrors('workType')}" th:errors="*{workType}"	class="validation-message"></label>
+									    <label th:if="${#fields.hasErrors('workTypeId')}" th:errors="*{workTypeId}"	class="validation-message"></label>
 									</div>
 								</div>
 								<div class="form-group">
@@ -75,20 +75,27 @@
 							</form> 
 						</div>
 						<div class="col-md-7">
-							 <table class="table-responsive table-bordered table-hover">
+							<h2>Previous Logs</h2>
+							<div class="table-responsive" style="height: calc(100vh - 200px);  overflow-y: auto;">
+							 <table class="table table-bordered table-hover">
+							 	 <thead>
 							      <tr class="active">
 							      	<th>Jira Id</th>
 							        <th>Work Type</th>
 							        <th>Hours</th>
 							        <th>Description</th>
 							      </tr>
-							      <tr th:each="entry : ${logEntries}">
-							        <td th:text="${entry.jiraId}">Jira Id</td>
-							        <td th:text="${entry.workType}">Work Type</td>
-							        <td th:text="${entry.hour}">0.0</td>
-							        <td th:text="${entry.description}">0.0</td>
-							      </tr>
+							      </thead>
+							      <tbody>
+								      <tr th:each="entry : ${workLogs}">
+								        <td th:text="${entry.jiraId}">Jira Id</td>
+								        <td th:text="${entry.workType}">Work Type</td>
+								        <td th:text="${entry.hour}">0.0</td>
+								        <td th:text="${entry.description}">0.0</td>
+								      </tr>
+								   </tbody>
 						    </table>
+						    </div>
 						</div>
 					</div>
 					

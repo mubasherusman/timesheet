@@ -9,10 +9,11 @@ import org.springframework.data.jpa.repository.support.JpaEntityInformation;
 import org.springframework.data.jpa.repository.support.JpaEntityInformationSupport;
 import org.springframework.data.jpa.repository.support.SimpleJpaRepository;
 import org.springframework.data.repository.NoRepositoryBean;
+import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
 
 @NoRepositoryBean
-@Transactional(readOnly=false)
+@Transactional(readOnly=false,isolation = Isolation.READ_UNCOMMITTED)
 public class GenericSimpleJpaRepositoryImpl<T, ID extends Serializable> extends SimpleJpaRepository<T, ID> implements GenericSimpleJpaRepository<T, ID>{
 	
 	private final EntityManager entityManager;

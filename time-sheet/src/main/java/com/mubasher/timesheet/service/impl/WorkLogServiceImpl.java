@@ -1,10 +1,10 @@
 package com.mubasher.timesheet.service.impl;
 
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.mubasher.timesheet.dao.WorkLogRepository;
@@ -14,7 +14,7 @@ import com.mubasher.timesheet.model.WorkType;
 import com.mubasher.timesheet.service.WorkLogService;
 
 @Service
-@Transactional(readOnly=false)
+@Transactional(readOnly=false,isolation = Isolation.READ_UNCOMMITTED)
 public class WorkLogServiceImpl implements WorkLogService{
 
 	@Autowired
@@ -44,6 +44,8 @@ public class WorkLogServiceImpl implements WorkLogService{
 	
 	@Override
 	public Work logWork(Work work) {
+		WorkType wt= workTypeRepository.findByExample(work.getWorkType());
+		work.setWorkType(wt);
 		return workLogRepository.saveAndFlush(work);
 	}
 
@@ -59,8 +61,8 @@ public class WorkLogServiceImpl implements WorkLogService{
 
 	@Override
 	public Work findWork(Integer id) {
-		Optional<Work> o =  workLogRepository.findById(id);
-		return o.get();
+		Work o =  workLogRepository.findById(id);
+		return o;
 	}
 
 	@Override
