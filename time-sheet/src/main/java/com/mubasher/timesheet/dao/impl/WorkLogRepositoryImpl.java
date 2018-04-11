@@ -40,7 +40,7 @@ public class WorkLogRepositoryImpl extends GenericJpaRepositoryImpl<Work, Intege
 
 	@Override
 	public List<Work> findByUserIdAndWeek(int id, int week) {
-		Query q= em.createNativeQuery("SELECT * FROM work_logs where user_id = ?1 AND week = ?2 ", Work.class);
+		Query q= em.createNativeQuery("SELECT * FROM work_logs where user_id = ?1 AND week = ?2 order by id desc", Work.class);
 		q.setParameter(1, id);
 		q.setParameter(2, week);
 		@SuppressWarnings("unchecked")

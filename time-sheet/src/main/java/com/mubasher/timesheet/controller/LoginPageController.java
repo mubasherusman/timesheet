@@ -52,10 +52,14 @@ public class LoginPageController {
 		return modelAndView;
 	}
 	
-	@RequestMapping(value = "/registration", method = RequestMethod.POST)
+	@RequestMapping(value = "/register", method = RequestMethod.POST)
 	public ModelAndView createNewUser(@Valid User user, BindingResult bindingResult) {
 		ModelAndView modelAndView = new ModelAndView();
-		User userExists = userService.findUserByEmail(user.getEmail());
+		User userExists = null;
+		try {
+		userExists = userService.findUserByEmail(user.getEmail());
+		}catch (Exception e) {
+		}
 		if (userExists != null) {
 			bindingResult
 					.rejectValue("email", "error.user",
@@ -113,6 +117,8 @@ public class LoginPageController {
 		
 		return new ModelAndView("redirect:/home");
 	}
+	
+	
 	
 	@RequestMapping(value="/work_log", method = RequestMethod.PUT)
 	public ModelAndView  updateWorkLog(@Valid WorkLog workLog, BindingResult bindingResult, RedirectAttributes attr){
