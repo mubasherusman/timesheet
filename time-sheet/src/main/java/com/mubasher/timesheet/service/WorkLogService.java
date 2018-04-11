@@ -10,7 +10,7 @@ public interface WorkLogService {
 
 	Work logWork(Work work);
 
-	void deleteWork(Work w);
+	boolean deleteWork(Work w);
 
 	Work findWork(Work w);
 
@@ -23,5 +23,7 @@ public interface WorkLogService {
 	int logWorks(List<Work> works);
 
 	List<Work> findWorksByUserId(int id);
+
+	List<Work> findWorksByUserIdAndCurrentWeek(int id);
 
 }

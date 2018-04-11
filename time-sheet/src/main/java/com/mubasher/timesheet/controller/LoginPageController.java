@@ -13,6 +13,7 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -83,9 +84,11 @@ public class LoginPageController {
 			WorkLog wl = new WorkLog();
 			wl.setCurrentDate(new Date());
 			model.addAttribute("workLog", wl);
-		} 
+		} else if (!model.containsAttribute("update")){
+			model.addAttribute("update",true);
+		}
 		
-		List<Work> works = workLogService.findWorksByUserId(user.getId());
+		List<Work> works = workLogService.findWorksByUserIdAndCurrentWeek(user.getId());
 		model.addAttribute("workLogs",BeanMapper.mapWork(works));
 		
 		List<WorkType> workTypes = workLogService.findWorkTypes();
@@ -102,6 +105,7 @@ public class LoginPageController {
 			Work work = BeanMapper.map(workLog);
 			work.setUser(user);
 			workLogService.logWork(work);
+			attr.addFlashAttribute("update", false);
 		} else {
 			attr.addFlashAttribute("org.springframework.validation.BindingResult.workLog", bindingResult);
 			attr.addFlashAttribute("workLog", workLog);
@@ -110,5 +114,38 @@ public class LoginPageController {
 		return new ModelAndView("redirect:/home");
 	}
 	
+	@RequestMapping(value="/work_log", method = RequestMethod.PUT)
+	public ModelAndView  updateWorkLog(@Valid WorkLog workLog, BindingResult bindingResult, RedirectAttributes attr){
+		if (!bindingResult.hasErrors()) {
+			Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+			User user = userService.findUserByEmail(auth.getName());
+			Work work = BeanMapper.map(workLog);
+			work.setUser(user);
+			workLogService.logWork(work);
+		} else {
+			attr.addFlashAttribute("org.springframework.validation.BindingResult.workLog", bindingResult);
+			attr.addFlashAttribute("workLog", workLog);
+		}
+		
+		return new ModelAndView("redirect:/home");
+	}
+	
+	@RequestMapping(value="/delete_work_log", method = RequestMethod.POST)
+	public ModelAndView  deleteWorkLog(@RequestParam("id") Integer id, RedirectAttributes attr) throws Exception{
+		boolean deleted = workLogService.deleteWork(workLogService.findWork(id));
+		if(!deleted) {
+			throw new Exception("Work Log not deleted.");
+		}
+		
+		return new ModelAndView("redirect:/home");
+	}
+	
+	@RequestMapping(value="/edit_work_log", method = RequestMethod.POST)
+	public ModelAndView  editWorkLog(@RequestParam("id") Integer id, RedirectAttributes attr){
+		Work w = workLogService.findWork(id);
+		WorkLog workLog = BeanMapper.map(w);
+		attr.addFlashAttribute("workLog", workLog);
+		return new ModelAndView("redirect:/home");
+	}
 
 }

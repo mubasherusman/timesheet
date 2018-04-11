@@ -26,7 +26,7 @@ public class BeanMapper {
 		user.setEmail(workLog.getUserEmail());
 		
 		Work work = new Work(user , date,workLog.getJiraId() , workLog.getDescription(), new WorkType(workLog.getWorkTypeId()), workLog.getHour(), week);
-		
+		work.setId(workLog.getId());
 		return work;
 		
 	}
@@ -38,6 +38,7 @@ public class BeanMapper {
 		if(u!=null) {
 			wl.setUserEmail(u.getEmail());
 		}
+		wl.setId(work.getId());
 		wl.setDescription(work.getDescription());
 		wl.setHour(work.getHours());
 		wl.setJiraId(work.getJiraId());

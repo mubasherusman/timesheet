@@ -47,8 +47,6 @@ public interface GenericJpaRepository <T, ID extends Serializable>
 	 */
 	T findById(ID id);
 	
-	T findByExample(T entity);
-
 	/**
 	 * Returns whether an entity with the given id exists.
 	 * 
@@ -83,6 +81,6 @@ public interface GenericJpaRepository <T, ID extends Serializable>
 	 */
 	void deleteAll(Iterable<? extends T> entities);
 
-	
+	T findByExample(T entity);
 
 }

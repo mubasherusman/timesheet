@@ -33,6 +33,7 @@ public class GenericJpaRepositoryImpl<T, ID extends Serializable> implements Gen
 	}
 
 	@Override
+	@Transactional
 	public T saveAndFlush(T entity) {
 		T result = save(entity);
 		flush();
@@ -40,12 +41,14 @@ public class GenericJpaRepositoryImpl<T, ID extends Serializable> implements Gen
 	}
 
 	@Override
+	@Transactional
 	public T getOne(ID id) {
 		Assert.notNull(id, ID_MUST_NOT_BE_NULL);
 		return em.getReference(getDomainClass(), id);
 	}
 
 	@Override
+	@Transactional
 	public T save(T entity) {
 		if (isNew(entity)) {
 			em.persist(entity);
@@ -58,7 +61,7 @@ public class GenericJpaRepositoryImpl<T, ID extends Serializable> implements Gen
 
 	private boolean isNew(T entity) {
 		
-		return !em.contains(entity);
+		return em.contains(entity);
 	}
 	
 	protected Class<T> getDomainClass() {
@@ -66,6 +69,7 @@ public class GenericJpaRepositoryImpl<T, ID extends Serializable> implements Gen
 	}
 
 	@Override
+	@Transactional
 	public T findById(ID id) {
 		Assert.notNull(id, ID_MUST_NOT_BE_NULL);
 		return em.find(getDomainClass(), id);
@@ -73,13 +77,14 @@ public class GenericJpaRepositoryImpl<T, ID extends Serializable> implements Gen
 
 	
 	@Override
+	@Transactional
 	public void delete(T entity) {
 		Assert.notNull(entity, "The entity must not be null!");
-		em.remove(em.contains(entity) ? entity : em.merge(entity));
-		
+		em.remove(em.contains(entity) ? entity : em.merge(entity));		
 	}
 
 	@Override
+	@Transactional
 	public void deleteAll(Iterable<? extends T> entities) {
 		Assert.notNull(entities, "The given Iterable of entities not be null!");
 
@@ -90,17 +95,20 @@ public class GenericJpaRepositoryImpl<T, ID extends Serializable> implements Gen
 	}
 
 	@Override
+	@Transactional
 	public boolean existsById(ID id) {
 		return findById(id)!=null;
 	}
 
 	@Override
+	@Transactional
 	public void deleteById(ID id) {
 		delete(findById(id));
 		
 	}
 
 	@Override
+	@Transactional
 	public T findByExample(T entity) {
 		
 		throw new NotImplementedException();

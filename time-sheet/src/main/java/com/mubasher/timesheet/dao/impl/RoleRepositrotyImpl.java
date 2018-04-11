@@ -5,14 +5,13 @@ import javax.persistence.Query;
 
 import org.springframework.data.jpa.repository.support.JpaEntityInformationSupport;
 import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.mubasher.timesheet.dao.RoleRepository;
 import com.mubasher.timesheet.model.Role;
 
 @Repository("roleRepository")
-@Transactional(readOnly=false,isolation = Isolation.READ_UNCOMMITTED)
+@Transactional
 public class RoleRepositrotyImpl extends GenericJpaRepositoryImpl<Role, Integer> implements RoleRepository{
 
 	public RoleRepositrotyImpl(EntityManager entityManager) {

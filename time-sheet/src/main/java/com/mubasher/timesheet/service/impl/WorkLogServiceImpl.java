@@ -1,10 +1,11 @@
 package com.mubasher.timesheet.service.impl;
 
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.mubasher.timesheet.dao.WorkLogRepository;
@@ -14,7 +15,7 @@ import com.mubasher.timesheet.model.WorkType;
 import com.mubasher.timesheet.service.WorkLogService;
 
 @Service
-@Transactional(readOnly=false,isolation = Isolation.READ_UNCOMMITTED)
+@Transactional(readOnly=false)
 public class WorkLogServiceImpl implements WorkLogService{
 
 	@Autowired
@@ -50,8 +51,10 @@ public class WorkLogServiceImpl implements WorkLogService{
 	}
 
 	@Override
-	public void deleteWork(Work w) {
+	public boolean deleteWork(Work w) {
 		workLogRepository.delete(w);
+		boolean deleted =  workLogRepository.findById(w.getId()) == null ? true:false;
+		return deleted;
 	}
 
 	@Override
@@ -73,6 +76,15 @@ public class WorkLogServiceImpl implements WorkLogService{
 	@Override
 	public List<Work> findWorksByUserId(int id) {
 		return workLogRepository.findByUserId(id);
+	}
+
+	@Override
+	public List<Work> findWorksByUserIdAndCurrentWeek(int id) {
+		Date date = new Date();
+		Calendar c = Calendar.getInstance();
+		c.setTime(date);
+		int week = c.get(Calendar.WEEK_OF_YEAR);
+		return workLogRepository.findByUserIdAndWeek(id,week);
 	}
 	
 	

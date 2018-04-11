@@ -3,15 +3,16 @@
 	xmlns:th="http://www.thymeleaf.org" lang="en">
 
 <head>
-<title>Admin Page</title>
-<link rel="stylesheet" type="text/css" th:href="@{/css/home.css}" />
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-<script	src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
-<script	src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+	<title>Admin Page</title>
+	<link rel="stylesheet" type="text/css" th:href="@{/css/home.css}" />
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+	<script	src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+	<script	src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 </head>
 
 <body>
+	
 	<div class="container">
 	
 		<form th:action="@{/logout}" method="get">
@@ -19,32 +20,34 @@
 				type="Submit">Logout</button>
 		</form>    
 		
-		<div class="panel-group" style="margin-top:40px">
+		<div class="panel-group" style="margin-top:35px">
 			<div class="panel panel-primary">
 				<div class="panel-heading">
 					<span th:utext="${userName}"></span>
 				</div>
-				<div class="panel-body" style="height: calc(100vh - 120px);">
+				<div class="panel-body" style="height: calc(100vh - 150px);" > 
 					<div class="row">
-						<div class="col-md-5">
-							<form autocomplete="off" action="#" th:action="@{/work_log}" th:object="${workLog}" method="post" class="form-horizontal" role="form">
+						<div class="col-md-3">
+							<form autocomplete="off" action="#" th:action="@{/work_log}" th:object="${workLog}" 
+								th:method="${update} == true ? PUT : POST" 
+								class="form-horizontal" role="form">
 								<h2>Work Log Form</h2>
-								
+								 <input type="hidden" name="id" id="id" th:value="*{id}" />
 								<div class="form-group">
-									<div class="col-sm-9">
+									<div class="col-sm-12">
 										<input type="date" th:value="*{currentDate}" th:field="*{currentDate}"  class="form-control" /> 
 										<label th:if="${#fields.hasErrors('currentDate')}" th:errors="*{currentDate}"	class="validation-message"></label>
 									</div>
 								</div>
 								
 								<div class="form-group">
-									<div class="col-sm-9">
+									<div class="col-sm-12">
 										<input type="text" th:field="*{jiraId}" placeholder="Jira Id" class="form-control" /> 
 										<label th:if="${#fields.hasErrors('jiraId')}" th:errors="*{jiraId}"	class="validation-message"></label>
 									</div>
 								</div>
 								<div class="form-group">
-									<div class="col-sm-9">
+									<div class="col-sm-12">
 										 <select class="form-control" th:field="*{workTypeId}">
 									        <option value="">Select Work Type</option>
 									        <option th:each="wt : ${workTypes}"
@@ -55,43 +58,54 @@
 									</div>
 								</div>
 								<div class="form-group">
-									<div class="col-sm-9">
-										<input type="text" th:field="*{hour}"  placeholder="0.0 (in hr.)" class="form-control" /> 
+									<div class="col-sm-12">
+										<input type="number" required th:field="*{hour}"  min="0.0" value="0.00" step="0.25" class="form-control" /> 
 										<label th:if="${#fields.hasErrors('hour')}" th:errors="*{hour}"	class="validation-message"></label>
 									</div>
 								</div>
 								
 								<div class="form-group">
-									<div class="col-sm-9">
-										<textarea class="form-control" rows="2" th:value="*{description}" th:field="*{description}" th:placeholder="Description"></textarea>
+									<div class="col-sm-12">
+										<textarea class="form-control" rows="5" th:value="*{description}" th:field="*{description}" th:placeholder="Description"></textarea>
 									</div>
 								</div>
 								
 								<div class="form-group">
-									<div class="col-sm-9">
+									<div class="col-sm-12">
 										<button type="submit" class="btn btn-primary btn-block">Submit</button>
 									</div>
 								</div>								
 							</form> 
 						</div>
-						<div class="col-md-7">
-							<h2>Previous Logs</h2>
-							<div class="table-responsive" style="height: calc(100vh - 200px);  overflow-y: auto;">
+						<div class="col-md-9">
+							<h2>Work Logs For Current Week</h2>
+							<div class="table-responsive" style="height: calc(100vh - 230px);  overflow-y: auto;"> 
 							 <table class="table table-bordered table-hover">
 							 	 <thead>
 							      <tr class="active">
+							      	<th>Date</th>
 							      	<th>Jira Id</th>
 							        <th>Work Type</th>
 							        <th>Hours</th>
 							        <th>Description</th>
+							        <th></th>
 							      </tr>
 							      </thead>
 							      <tbody>
 								      <tr th:each="entry : ${workLogs}">
-								        <td th:text="${entry.jiraId}">Jira Id</td>
-								        <td th:text="${entry.workType}">Work Type</td>
-								        <td th:text="${entry.hour}">0.0</td>
-								        <td th:text="${entry.description}">0.0</td>
+								        <td class="col-md-2" th:text="${entry.currentDate}">--/--/----</td>
+								        <td class="col-md-1" th:text="${entry.jiraId}">Jira Id</td>
+								        <td class="col-md-2" th:text="${entry.workType}">Work Type</td>
+								        <td class="col-md-1" th:text="${entry.hour}">0.0</td>
+								        <td class="col-md" th:text="${entry.description}">0.0</td>
+								        <td class="col-md-3" style="text-align: right;">
+								        	<form method="POST" th:action="@{/edit_work_log(id=${entry.id})}" style="display:  inline;">
+								        		<button type="submit" class="btn btn-primary">Edit </button>
+								        	</form>
+								        	<form th:action="@{/delete_work_log(id=${entry.id})}" method="POST" style="display:  inline;">
+											    <button class='btn btn-warning' type="submit">Delete</button>
+											</form>
+								        </td>
 								      </tr>
 								   </tbody>
 						    </table>
@@ -105,5 +119,27 @@
 		</div>
 		
 	</div>
+	<!-- <div id="confirm" class="modal hide fade">
+		  <div class="modal-body">
+		    Are you sure?
+		  </div>
+		  <div class="modal-footer">
+		    <button type="button" data-dismiss="modal" class="btn btn-primary" id="delete">Delete</button>
+		    <button type="button" data-dismiss="modal" class="btn">Cancel</button>
+		  </div>
+	</div>
+   <script type="text/javascript">
+	   $('button[name="remove_work_log"]').on('click', function(e) {
+		   var $form = $(this).closest('form');
+		   e.preventDefault();
+		   $('#confirm').modal({
+		       backdrop: 'static',
+		       keyboard: false
+		     })
+		     .one('click', '#delete', function(e) {
+		       $form.trigger('submit');
+		     });
+		 });
+	</script> -->
 </body>
 </html>

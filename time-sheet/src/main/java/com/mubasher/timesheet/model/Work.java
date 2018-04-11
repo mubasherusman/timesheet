@@ -25,7 +25,7 @@ public class Work{
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
 	
-	@ManyToOne(fetch=FetchType.LAZY,cascade=CascadeType.ALL)
+	@ManyToOne(fetch=FetchType.LAZY,cascade= {CascadeType.DETACH,CascadeType.MERGE,CascadeType.REFRESH})
 	private User user;
 	
 	@Temporal(TemporalType.DATE)
@@ -36,7 +36,7 @@ public class Work{
 	
 	private String description;
 	
-	@ManyToOne(fetch=FetchType.EAGER,cascade=CascadeType.ALL)
+	@ManyToOne(fetch=FetchType.EAGER,cascade= {CascadeType.DETACH,CascadeType.MERGE,CascadeType.REFRESH})
 	private WorkType workType;
 	
 	private double hours;
@@ -67,6 +67,10 @@ public class Work{
 		this.workType = workType;
 		this.hours = hour;
 		this.week = week;
+	}
+
+	public Work(Integer id) {
+		this.id = id;
 	}
 
 	public User getUser() {

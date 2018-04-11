@@ -13,6 +13,8 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class WorkLog {
 	
+	private int id;
+	
 	@NotNull(message="* Please Select Date")
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	private Date currentDate;
@@ -69,5 +71,11 @@ public class WorkLog {
 	}
 	public void setWorkType(String workType) {
 		this.workType = workType;
+	}
+	public int getId() {
+		return id;
+	}
+	public void setId(int id) {
+		this.id = id;
 	}
 }

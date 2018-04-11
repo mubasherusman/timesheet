@@ -11,4 +11,6 @@ public interface WorkLogRepository extends GenericJpaRepository<Work, Integer>{
 
 	List<Work> findAll();
 
+	List<Work> findByUserIdAndWeek(int id,int week);
+
 }
