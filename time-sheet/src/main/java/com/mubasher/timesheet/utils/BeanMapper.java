@@ -21,12 +21,17 @@ public class BeanMapper {
 		Date date = workLog.getCurrentDate();
 		Calendar c = Calendar.getInstance();
 		c.setTime(date);
-		int week = c.get(Calendar.WEEK_OF_YEAR);
-		User user = new User();
-		user.setEmail(workLog.getUserEmail());
 		
-		Work work = new Work(user , date,workLog.getJiraId() , workLog.getDescription(), new WorkType(workLog.getWorkTypeId()), workLog.getHour(), week);
-		work.setId(workLog.getId());
+		Work work = Work.builder()
+				.id(workLog.getId())
+				.date(date)
+				.description(workLog.getDescription())
+				.hours(workLog.getHour())
+				.week(c.get(Calendar.WEEK_OF_YEAR))
+				.jiraId(workLog.getJiraId())
+				.user(User.builder().email(workLog.getUserEmail()).build())
+				.workType(WorkType.builder().id(workLog.getWorkTypeId()).build())
+				.build();
 		return work;
 		
 	}

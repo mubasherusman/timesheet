@@ -6,6 +6,15 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 @Entity
 @Table(name = "work_type")
 public class WorkType{
@@ -17,45 +26,4 @@ public class WorkType{
 	private String type;
 	
 	private String description;
-	
-	public WorkType() {
-		
-	}
-
-	public WorkType(String type, String desc) {
-		this.type = type;
-		this.description = desc;
-	}
-
-	public WorkType(int id) {
-		this.id = id;
-	}
-
-	public String getType() {
-		return type;
-	}
-
-	public void setType(String type) {
-		this.type = type;
-	}
-
-	public String getDescription() {
-		return description;
-	}
-
-	public void setDescription(String description) {
-		this.description = description;
-	}
-
-	public int getId() {
-		return id;
-	}
-
-	public void setId(int id) {
-		this.id = id;
-	}
-	
-	
-	
-
 }

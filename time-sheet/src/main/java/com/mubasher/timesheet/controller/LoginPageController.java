@@ -25,45 +25,42 @@ import com.mubasher.timesheet.service.UserService;
 import com.mubasher.timesheet.service.WorkLogService;
 import com.mubasher.timesheet.utils.BeanMapper;
 
-
 @Controller
 public class LoginPageController {
-	
+
 	@Autowired
 	private UserService userService;
-	
+
 	@Autowired
 	private WorkLogService workLogService;
 
-	@RequestMapping(value={"/", "/login"}, method = RequestMethod.GET)
-	public ModelAndView login(){
+	@RequestMapping(value = { "/", "/login" }, method = RequestMethod.GET)
+	public ModelAndView login() {
 		ModelAndView modelAndView = new ModelAndView();
 		modelAndView.setViewName("login");
 		return modelAndView;
 	}
-	
-	
-	@RequestMapping(value="/registration", method = RequestMethod.GET)
-	public ModelAndView registration(){
+
+	@RequestMapping(value = "/registration", method = RequestMethod.GET)
+	public ModelAndView registration() {
 		ModelAndView modelAndView = new ModelAndView();
 		User user = new User();
 		modelAndView.addObject("user", user);
 		modelAndView.setViewName("registration");
 		return modelAndView;
 	}
-	
+
 	@RequestMapping(value = "/register", method = RequestMethod.POST)
 	public ModelAndView createNewUser(@Valid User user, BindingResult bindingResult) {
 		ModelAndView modelAndView = new ModelAndView();
 		User userExists = null;
 		try {
-		userExists = userService.findUserByEmail(user.getEmail());
-		}catch (Exception e) {
+			userExists = userService.findUserByEmail(user.getEmail());
+		} catch (Exception e) {
 		}
 		if (userExists != null) {
-			bindingResult
-					.rejectValue("email", "error.user",
-							"There is already a user registered with the email provided");
+			bindingResult.rejectValue("email", "error.user",
+					"There is already a user registered with the email provided");
 		}
 		if (bindingResult.hasErrors()) {
 			modelAndView.setViewName("registration");
@@ -72,37 +69,38 @@ public class LoginPageController {
 			modelAndView.addObject("successMessage", "User has been registered successfully");
 			modelAndView.addObject("userDetail", BeanMapper.map(u));
 			modelAndView.setViewName("registration");
-			
+
 		}
 		return modelAndView;
 	}
-	
-	@RequestMapping(value="/home", method = RequestMethod.GET)
-	public String home(Model model){
+
+	@RequestMapping(value = "/home", method = RequestMethod.GET)
+	public ModelAndView home(Model model) {
+
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 		User user = userService.findUserByEmail(auth.getName());
-		
-		
+
 		model.addAttribute("userName", "Welcome " + user.getName() + " (" + user.getEmail() + ")");
-		if(!model.containsAttribute("workLog")) {
+		if (!model.containsAttribute("workLog")) {
 			WorkLog wl = new WorkLog();
 			wl.setCurrentDate(new Date());
 			model.addAttribute("workLog", wl);
-		} else if (!model.containsAttribute("update")){
-			model.addAttribute("update",true);
+		} else if (!model.containsAttribute("update")) {
+			model.addAttribute("update", true);
 		}
-		
+
 		List<Work> works = workLogService.findWorksByUserIdAndCurrentWeek(user.getId());
-		model.addAttribute("workLogs",BeanMapper.mapWork(works));
-		
+		model.addAttribute("workLogs", BeanMapper.mapWork(works));
+
 		List<WorkType> workTypes = workLogService.findWorkTypes();
 		model.addAttribute("workTypes", workTypes);
-		
-		return "/home";
+		ModelAndView modelAndView = new ModelAndView("home");
+		modelAndView.addAllObjects(model.asMap());
+		return modelAndView;
 	}
-	
-	@RequestMapping(value="/work_log", method = RequestMethod.POST)
-	public ModelAndView  workLog(@Valid WorkLog workLog, BindingResult bindingResult, RedirectAttributes attr){
+
+	@RequestMapping(value = "/work_log", method = RequestMethod.POST)
+	public ModelAndView workLog(@Valid WorkLog workLog, BindingResult bindingResult, RedirectAttributes attr) {
 		if (!bindingResult.hasErrors()) {
 			Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 			User user = userService.findUserByEmail(auth.getName());
@@ -114,14 +112,12 @@ public class LoginPageController {
 			attr.addFlashAttribute("org.springframework.validation.BindingResult.workLog", bindingResult);
 			attr.addFlashAttribute("workLog", workLog);
 		}
-		
+
 		return new ModelAndView("redirect:/home");
 	}
-	
-	
-	
-	@RequestMapping(value="/work_log", method = RequestMethod.PUT)
-	public ModelAndView  updateWorkLog(@Valid WorkLog workLog, BindingResult bindingResult, RedirectAttributes attr){
+
+	@RequestMapping(value = "/work_log", method = RequestMethod.PUT)
+	public ModelAndView updateWorkLog(@Valid WorkLog workLog, BindingResult bindingResult, RedirectAttributes attr) {
 		if (!bindingResult.hasErrors()) {
 			Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 			User user = userService.findUserByEmail(auth.getName());
@@ -132,22 +128,22 @@ public class LoginPageController {
 			attr.addFlashAttribute("org.springframework.validation.BindingResult.workLog", bindingResult);
 			attr.addFlashAttribute("workLog", workLog);
 		}
-		
+
 		return new ModelAndView("redirect:/home");
 	}
-	
-	@RequestMapping(value="/delete_work_log", method = RequestMethod.POST)
-	public ModelAndView  deleteWorkLog(@RequestParam("id") Integer id, RedirectAttributes attr) throws Exception{
+
+	@RequestMapping(value = "/delete_work_log", method = RequestMethod.POST)
+	public ModelAndView deleteWorkLog(@RequestParam("id") Integer id, RedirectAttributes attr) throws Exception {
 		boolean deleted = workLogService.deleteWork(workLogService.findWork(id));
-		if(!deleted) {
+		if (!deleted) {
 			throw new Exception("Work Log not deleted.");
 		}
-		
+
 		return new ModelAndView("redirect:/home");
 	}
-	
-	@RequestMapping(value="/edit_work_log", method = RequestMethod.POST)
-	public ModelAndView  editWorkLog(@RequestParam("id") Integer id, RedirectAttributes attr){
+
+	@RequestMapping(value = "/edit_work_log", method = RequestMethod.POST)
+	public ModelAndView editWorkLog(@RequestParam("id") Integer id, RedirectAttributes attr) {
 		Work w = workLogService.findWork(id);
 		WorkLog workLog = BeanMapper.map(w);
 		attr.addFlashAttribute("workLog", workLog);

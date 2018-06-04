@@ -24,7 +24,7 @@ import com.mubasher.timesheet.service.WorkLogService;
 import com.mubasher.timesheet.utils.BeanMapper;
 
 
-@RestController
+//@RestController
 @RequestMapping(APIConstants.API_URL_PREFIX_WORK_LOGS)
 public class WorkLogController {
 	

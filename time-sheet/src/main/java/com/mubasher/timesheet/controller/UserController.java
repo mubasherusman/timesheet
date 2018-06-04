@@ -18,7 +18,7 @@ import com.mubasher.timesheet.service.UserService;
 import com.mubasher.timesheet.utils.BeanMapper;
 
 
-@RestController
+//@RestController
 @RequestMapping(APIConstants.API_URL_PREFIX_USER)
 public class UserController {
 	
