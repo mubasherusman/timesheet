@@ -73,7 +73,7 @@
 									</div>
 									
 									<div class="form-group">
-											<input type="text" th:field="*{jiraId}" placeholder="Jira Id" class="form-control" /> 
+											<input type="number" th:field="*{jiraId}" placeholder="Jira Id" class="form-control" /> 
 											<label th:if="${#fields.hasErrors('jiraId')}" th:errors="*{jiraId}"	class="validation-message"></label>
 									</div>
 									<div class="form-group">
