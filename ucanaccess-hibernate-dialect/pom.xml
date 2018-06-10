@@ -50,14 +50,14 @@
 		-->
 	</properties>
 
-	<!-- 
-	<modules> 
-		<module>basic</module> 
-		<module>annotations</module> 
-		<module>entitymanager</module> 
-		<module>envers</module> 
-		<module>osgi</module> 
-	</modules> 
+	<!--
+	<modules>
+		<module>basic</module>
+		<module>annotations</module>
+		<module>entitymanager</module>
+		<module>envers</module>
+		<module>osgi</module>
+	</modules>
 	-->
 
 	<dependencies>
